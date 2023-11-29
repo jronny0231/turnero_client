@@ -13,6 +13,7 @@
   "dependencies": {
     "@hookform/resolvers": "3.3.2",
     "@tanstack/react-query": "4.35.0",
+    "@tanstack/react-table": "8.10.7",
     "axios": "1.5.0",
     "flowbite": "2.2.0",
     "react": "18.2.0",

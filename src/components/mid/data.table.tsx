@@ -23,7 +23,8 @@ export const DataTable = ({ columns, data, actions, ...rest }: TableType) => {
     
 
     return (
-        <table {...rest}>
+        <div className="overflow-x-auto max-w-min">
+            <table {...rest}>
             <thead>
                 <tr className="border-b">
                     {columns.map(col => (
@@ -60,5 +61,6 @@ export const DataTable = ({ columns, data, actions, ...rest }: TableType) => {
 
             </tfoot>
         </table>
+        </div>
     )
 }

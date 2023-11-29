@@ -2,6 +2,7 @@ import { SearchIcon } from "../components/icons/helper.icons"
 import { UsersIcon } from "../components/icons/main.icons"
 import { type TableType, DataTable } from "../components/mid/data.table"
 import { MainHeader } from "../components/mid/main.header"
+import { TansTable } from "../components/mid/tanstable"
 import { useSEO } from "../hooks/useSEO"
 
 export const UsersList = (): JSX.Element => {
@@ -21,6 +22,14 @@ export const UsersList = (): JSX.Element => {
             key: 'username',
             name: 'NOMBRE DE USUARIO',
             type: 'string'
+        },{
+            key: 'rol',
+            name: 'ROL',
+            type: 'string'
+        },{
+            key: 'status',
+            name: 'ESTADO',
+            type: 'string'
         }
     ]
 
@@ -28,23 +37,33 @@ export const UsersList = (): JSX.Element => {
         {
             id: 1,
             name: 'Nikii de los Santos',
-            username: 'Nikii0131'
+            username: 'Nikii0131',
+            rol: 'Administrador',
+            status: 'activo'
         },{
             id: 2,
             name: 'Ronny Martinez',
-            username: 'Rmartinez0231'
+            username: 'Rmartinez0231',
+            rol: 'Agente de Servicios',
+            status: 'activo'
         },{
             id: 3,
             name: 'Pedro Escamosa',
-            username: 'Pete2345'
+            username: 'Pete2345',
+            rol: 'Agente de Servicios',
+            status: 'activo'
         },{
             id: 4,
             name: 'Juan Pablo Duarte',
-            username: 'Liberty1844'
+            username: 'Liberty1844',
+            rol: 'Analista',
+            status: 'inactivo'
         },{
             id: 5,
             name: 'Scarlett Johanson',
-            username: 'Viuda0101'
+            username: 'Viuda0101',
+            rol: 'Soporte TI',
+            status: 'activo'
         }
     ]
 
@@ -81,6 +100,7 @@ export const UsersList = (): JSX.Element => {
                     </button>
                 </search>
                 <DataTable columns={columns} data={data} actions={buttons} className={'min-w-full bg-sec-100'}/>
+                <TansTable data={data} />
             </section>
         </section>
     )
