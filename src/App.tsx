@@ -1,18 +1,34 @@
-import { Toaster, toast } from "sonner"
-import "./assets/app.css"
+import "./assets/styles.css"
+import { Routes, Route } from 'react-router-dom'
+import { UsersList } from './pages/user.list';
+import { ErrorPage } from './pages/helper/error.page';
+import { LoginPage } from './pages/helper/login.page';
+import { Layout } from './components/layout';
+import { Home } from './pages';
+import { ROUTES } from "./constants/app.constants";
 
 function App() {
 
-  const handleClick = () => {
-    toast("Boton clickeado!")
-  }
-
   return (
-    <>
-      <h1>Hola Mundo</h1>
-      <button onClick={handleClick}>Click me!</button>
-      <Toaster />
-    </>
+    <Routes>
+
+      <Route path={ROUTES.MAIN} element={<Layout />}>
+        <Route index element={<Home />} />
+
+        <Route path={ROUTES.ADMIN}>
+
+          <Route path={ROUTES.USERS} element={<UsersList />} />
+
+        </Route>
+      </Route>
+
+
+
+      <Route path='login' element={<LoginPage />} />
+
+      <Route path='*' element={<ErrorPage type={'PAGE NOT FOUND'} />} />
+
+    </Routes>
   )
 }
 
