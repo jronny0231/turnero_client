@@ -2,7 +2,6 @@ import { SearchIcon } from "../components/icons/helper.icons"
 import { UsersIcon } from "../components/icons/main.icons"
 import { type TableType, DataTable } from "../components/mid/data.table"
 import { MainHeader } from "../components/mid/main.header"
-import { TansTable } from "../components/mid/tanstable"
 import { useSEO } from "../hooks/useSEO"
 
 export const UsersList = (): JSX.Element => {
@@ -100,7 +99,6 @@ export const UsersList = (): JSX.Element => {
                     </button>
                 </search>
                 <DataTable columns={columns} data={data} actions={buttons} className={'min-w-full bg-sec-100'}/>
-                <TansTable data={data} />
             </section>
         </section>
     )
