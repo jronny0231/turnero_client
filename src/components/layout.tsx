@@ -1,12 +1,12 @@
-import { SidebarElement } from "../@types/global";
 import { QueueIcon } from "./icons/app.icons";
 import { HomeIcon, SettingsIcon, UsersIcon } from "./icons/main.icons";
-import { Sidebar } from "./utils/sidebar";
+import { Sidebar } from "./utils/sidebar/sidebar";
 import { ROUTES } from "../constants/app.constants";
 import { useAuthHook } from "../hooks/auth.hook"
 import { Outlet, Navigate } from "react-router-dom";
+import { ElementProps } from "./utils/sidebar/sidebar.element";
 
-const sidebar: SidebarElement[] = [
+const sidebar: ElementProps[] = [
     {
         name: 'Inicio',
         icon: <HomeIcon />,
@@ -64,3 +64,16 @@ export const Layout = () => {
     )
 
 }
+
+/*
+const List = {
+    [ROUTES.ADMIN]: {
+        name: '',
+        icon: 
+    }
+}
+
+const sidebarList = (data: []) => {
+
+}
+*/

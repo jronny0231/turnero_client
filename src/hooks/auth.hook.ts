@@ -4,7 +4,7 @@ import { useAccountStore, usePermissionsStore, useSessionStore } from "../store/
 import { Login } from "../services/login.service";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Credentials } from "../@types/global";
+import { Credentials, UserPermissions } from "../@types/global";
 import { getAuthUser, getPermissions } from "../services/auth.service";
 import { authRequest } from "../services/provider/axios";
 import { authedRequestInterceptor } from "../services/provider/middleware/request.middleware";
@@ -15,7 +15,7 @@ export const useAuthHook = () => {
     
     const session = useSessionStore(store => store)
     const account = useAccountStore(store => store)
-    const permissions = usePermissionsStore(store => store)
+    const control = usePermissionsStore(store => store)
 
     const location = useLocation()
 
@@ -25,7 +25,7 @@ export const useAuthHook = () => {
     const resetAll = () => {
         session.reset()
         account.reset()
-        permissions.reset()
+        control.reset()
     }
 
     const fakeData = () => {
@@ -47,7 +47,7 @@ export const useAuthHook = () => {
             type: 'USER'
         })
 
-        permissions.setPermissionsData([
+        control.setPermissionsData([
             {
                 id: 1,
                 slug: '/admin',
@@ -107,7 +107,7 @@ export const useAuthHook = () => {
             if (response.success === false) throw new Error(response.message + ', ' + response.data)
 
             if (typeof response.data !== 'string') {
-                permissions.setPermissionsData(response.data)
+                control.setPermissionsData(response.data)
             }
 
             return true
@@ -121,6 +121,19 @@ export const useAuthHook = () => {
 
             return false
         }
+    }
+
+    
+    const canAccess = ({path, make}: {path: string, make: keyof UserPermissions['can'] }) => {
+
+        const permission = control.permissions
+            .filter(access => ( access.slug === path && access.can[make] ))
+        
+        if(permission.length === 0) {
+            return false
+        }
+
+        return true
     }
 
 
@@ -166,5 +179,10 @@ export const useAuthHook = () => {
         }
     }    
 
-    return { login, authed: session.user }
+    return {
+        login,
+        authed: session.user,
+        access: control.permissions,
+        canAccess
+    }
 }

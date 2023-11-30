@@ -1,21 +1,14 @@
 import { useEffect, useState } from "react";
-import { SidebarElement } from "../../@types/global"
 import { Link, useLocation } from "react-router-dom";
 
-
-
-export const Sidebar = ({ elements }: { elements: SidebarElement[] }) => {
-
-    return (
-        <ul className="p-2 flex flex-col gap-3 relative justify-start">
-            {elements.map(el => (
-                <SidebarElement key={crypto.randomUUID()} props={el} />
-            ))}
-        </ul>
-    )
+export type ElementProps = {
+    name: string
+    icon: JSX.Element
+    href: string
+    children?: Array<Omit<ElementProps, 'children'>>
 }
 
-const SidebarElement = ({ props }: { props: SidebarElement }) => {
+export const SidebarElement = ({ props }: { props: ElementProps }) => {
 
     const [active, setActive] = useState<boolean>(false);
     const [isExpanded, setIsExpanded] = useState<boolean>(false);

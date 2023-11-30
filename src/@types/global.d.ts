@@ -3,7 +3,7 @@ import { AxiosError, AxiosResponse } from 'axios'
 export type mainStoreType = {
     user: UserData | null
     agent: object | null
-    permissions: object[]
+    permissions: UserPermissions[]
 }
 
 export interface CustomAxiosError extends AxiosError<unknown, T> {
@@ -66,13 +66,6 @@ export type UserPermissions = {
 }
 
 export interface SessionPermissionsData extends Pick<UserPermissions, 'id' | 'slug' | 'can' | 'nombre' | 'parent_id'> {}
-
-export type SidebarElement = {
-    name: string
-    icon: JSX.Element
-    href: string
-    children?: Array<Omit<SidebarElement, 'children'>>
-}
 
 export type IconProps = {
     strokeWidth?: number | undefined;

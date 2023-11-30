@@ -1,4 +1,5 @@
 import { forwardRef } from "react"
+import { SpinnerIcon } from "../icons/helper.icons"
 
 type ButtonType = {
     bussy?: boolean
@@ -12,6 +13,16 @@ export const Button: React.FC<ButtonType> = forwardRef<HTMLButtonElement, Button
         const condClass: React.HTMLAttributes<HTMLButtonElement>['className'] = `
         ${type === 'reset' ? ' bg-emphasys-50 text-prim-500 ' : ' bg-prim-500 text-emphasys-50 '}
     `
+        const LoadingTag = () => {
+            return (
+                <div className="flex flex-row justify-center items-center gap-4">
+                    <span className="animate-spin">
+                        <SpinnerIcon />
+                    </span>
+                    <p>Cargando...</p>
+                </div>
+            )
+        }
 
         return (
             <button
@@ -21,7 +32,7 @@ export const Button: React.FC<ButtonType> = forwardRef<HTMLButtonElement, Button
                 disabled={bussy}
                 {...props}
             >
-                {bussy ? 'Cargando...' : children}
+                {bussy ? <LoadingTag />  : children}
             </button>
         )
     })
