@@ -1,10 +1,10 @@
-import { QueueIcon } from "./icons/app.icons";
-import { HomeIcon, SettingsIcon, UsersIcon } from "./icons/main.icons";
-import { Sidebar } from "./utils/sidebar/sidebar";
-import { ROUTES } from "../constants/app.constants";
-import { useAuthHook } from "../hooks/auth.hook"
+import { QueueIcon } from "../../lib/icons/app.icons";
+import { HomeIcon, SettingsIcon, UsersIcon } from "../../lib/icons/main.icons";
+import { Sidebar } from "./sidebar/sidebar";
+import { ROUTES } from "../../lib/constants/app.constants";
+import { useAuthHook } from "../../hooks/auth.hook"
 import { Outlet, Navigate } from "react-router-dom";
-import { ElementProps } from "./utils/sidebar/sidebar.element";
+import { ElementProps } from "./sidebar/sidebar.element";
 
 const sidebar: ElementProps[] = [
     {

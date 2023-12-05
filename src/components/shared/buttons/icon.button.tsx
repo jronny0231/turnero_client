@@ -1,6 +1,5 @@
 import { forwardRef } from "react"
-import { DangerIcon, InfoIcon, SuccessIcon, WarningIcon } from "../icons/helper.icons"
-import { ToolTip } from "../utils/tooltip"
+import { DangerIcon, InfoIcon, SuccessIcon, WarningIcon } from "../../../lib/icons/helper.icons"
 
 const RoleIcons = {
     info: {
@@ -59,9 +58,6 @@ export const IconButton: React.FC<ButtonType> = forwardRef<HTMLButtonElement, Bu
             >
                 {bussy ? <LoadingIcon /> : <Icon />}
             </button>
-            <ToolTip>
-                {name}
-            </ToolTip>
             </>
         )
     })

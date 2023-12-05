@@ -8,7 +8,7 @@ import { Credentials, UserPermissions } from "../@types/global";
 import { getAuthUser, getPermissions } from "../services/auth.service";
 import { authRequest } from "../services/provider/axios";
 import { authedRequestInterceptor } from "../services/provider/middleware/request.middleware";
-import { ROUTES } from "../constants/app.constants";
+import { ROUTES } from "../lib/constants/app.constants";
 
 
 export const useAuthHook = () => {

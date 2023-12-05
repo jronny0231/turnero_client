@@ -1,5 +1,5 @@
 import { forwardRef } from "react"
-import { SpinnerIcon } from "../icons/helper.icons"
+import { SpinnerIcon } from "../../../lib/icons/helper.icons"
 
 type ButtonType = {
     bussy?: boolean

@@ -1,11 +1,11 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputPassword, InputText } from "../../components/low/input";
+import { InputPassword, InputText } from "../../components/shared/inputs/input";
 import { userCredential, userCredentialType } from "../../helpers/schemas/user.schema";
 import { toast } from 'sonner'
 import { useAuthHook } from '../../hooks/auth.hook'
 import { useState } from "react";
-import { Button } from "../../components/low/button";
+import { Button } from "../../components/shared/buttons/button";
 import { useSEO } from "../../hooks/useSEO";
 
 export const LoginPage = (): React.ReactElement => {
@@ -20,6 +20,7 @@ export const LoginPage = (): React.ReactElement => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const onSubmit: SubmitHandler<userCredentialType> = async (data) => {
+        
         setIsLoading(true)
         try {
             await login(data)

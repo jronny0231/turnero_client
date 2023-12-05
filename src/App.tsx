@@ -3,9 +3,9 @@ import { Routes, Route } from 'react-router-dom'
 import { UsersList } from './pages/user.crud';
 import { ErrorPage } from './pages/helper/error.page';
 import { LoginPage } from './pages/helper/login.page';
-import { Layout } from './components/layout';
+import { Layout } from './components/layouts/layout';
 import { Home } from './pages';
-import { ROUTES } from "./constants/app.constants";
+import { ROUTES } from "./lib/constants/app.constants";
 
 function App() {
 

@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { BASE_SOCKET } from '../../constants/api.constants';
+import { BASE_SOCKET } from '../../lib/constants/api.constants';
 
 export const init = (token: string) => {
     try {

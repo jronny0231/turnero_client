@@ -35,12 +35,12 @@ export const SidebarElement = ({ props }: { props: ElementProps }) => {
     const hasChild = props.children !== undefined ? true : false
 
     const activeStyle = active
-        ? 'bg-prim-600 text-white hover:bg-prim-500'
-        : 'text-prim-500 hover:bg-sky-200'
+        ? 'bg-prim-600 text-white hover:border-white'
+        : 'text-prim-800 hover:border-prim-800'
     return (
 
         <li>
-            <div className={`${activeStyle} h-12 transition-colors flex flex-row items-center justify-start`}>
+            <div className={`border-l-2 border-transparent ${activeStyle} h-12 transition-colors flex flex-row items-center justify-start`}>
                 <Link to={props.href} className="px-2 w-full h-full flex flex-row justify-start items-center gap-x-3">
                     <span> {props.icon} </span>
                     <span className="text-md ">{props.name}</span>

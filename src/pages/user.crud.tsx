@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { SearchIcon } from "../components/icons/helper.icons"
-import { UsersIcon } from "../components/icons/main.icons"
-import { type TableType, DataTable } from "../components/mid/data.table"
-import { MainHeader } from "../components/mid/main.header"
+import { SearchIcon } from "../lib/icons/helper.icons"
+import { UsersIcon } from "../lib/icons/main.icons"
+import { DataTable } from "../components/datatable/data.table"
+import { MainHeader } from "../components/header/main.header"
 import { useSEO } from "../hooks/useSEO"
 import data from "../../data/MOCK_DATA.json"
+import { TableProps } from "../components/datatable/lib/simple.table"
 
-const columns: TableType['columns'] = [
+const columns: TableProps['columns'] = [
     {
         key: 'id',
         name: 'ID',
@@ -28,7 +28,7 @@ const columns: TableType['columns'] = [
     }
 ]
 
-const buttons: TableType['actions'] = {
+const buttons: TableProps['actions'] = {
     name: 'Acciones',
     buttons: [
         {
@@ -54,14 +54,10 @@ export const UsersList = (): JSX.Element => {
 
     useSEO({ title: 'Lista de Usuarios' })
 
-    const [isLoading, setIsLoading] = useState(true)
-
-    useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 100)
-    }, [])
-
+    const dataPerformed = data.map(row => ({
+        uuid: crypto.randomUUID(),
+        ...row
+    }))
 
     return (
         <section className="w-full py-4 px-3 flex flex-col gap-y-7 justify-items-center items-start">
@@ -73,7 +69,7 @@ export const UsersList = (): JSX.Element => {
                         Adicionar
                     </button>
                 </search>
-                <DataTable columns={columns} data={data} actions={buttons} isLoading={isLoading} />
+                <DataTable columns={columns} data={dataPerformed} actions={buttons} />
             </section>
         </section>
     )

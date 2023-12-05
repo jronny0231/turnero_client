@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { BASE_API } from '../../constants/api.constants';
+import { BASE_API } from '../../lib/constants/api.constants';
 import { CustomAxiosResponse, Response } from '../../@types/global';
 import { requestHandlerError, responseHandlerError } from './handlers/error.handler';
 

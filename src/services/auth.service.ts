@@ -1,5 +1,5 @@
 import { Response, UserData, UserPermissions } from "../@types/global";
-import { PATH_URI } from "../constants/api.constants";
+import { PATH_URI } from "../lib/constants/api.constants";
 import { type ApiRequest } from "./provider/axios";
 
 
