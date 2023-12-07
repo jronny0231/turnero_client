@@ -12,7 +12,7 @@ import { ROUTES } from "../lib/constants/app.constants";
 
 
 export const useAuthHook = () => {
-    
+
     const session = useSessionStore(store => store)
     const account = useAccountStore(store => store)
     const control = usePermissionsStore(store => store)
@@ -28,54 +28,6 @@ export const useAuthHook = () => {
         control.reset()
     }
 
-    const fakeData = () => {
-        session.setToken("fake")
-
-        session.setUserData({
-            id: 1,
-            nombres: 'Faker User',
-            username: 'fakeruser',
-            activo: true,
-            correo: 'fake@user.com',
-            createdAt: new Date(),
-            rol: {
-                id: 1,
-                activo: true,
-                nombre: 'Administrador',
-                descripcion: 'Administra recursos'
-            },
-            type: 'USER'
-        })
-
-        control.setPermissionsData([
-            {
-                id: 1,
-                slug: '/admin',
-                nombre: 'Administracion',
-                can: { create: false, read: true, update: false, delete: false, }
-            },
-            {
-                id: 2,
-                slug: '/users',
-                nombre: 'Usuarios',
-                parent_id: 1,
-                can: { create: true, read: true, update: true, delete: true, }
-            },
-            {
-                id: 3,
-                slug: '/queues',
-                nombre: 'Turnos',
-                can: { create: true, read: true, update: true, delete: true, }
-            },
-            {
-                id: 4,
-                slug: '/profile',
-                nombre: 'Perfil',
-                can: { create: false, read: true, update: true, delete: false, }
-            }
-        ])  
-    }
-
     const authedAxios = () => {
         return authRequest({
             req: authedRequestInterceptor(session.token)
@@ -84,38 +36,37 @@ export const useAuthHook = () => {
 
     // Load on instance auth hook and check session data, location path and redirect according to logic.
     React.useEffect(() => {
-        
-        fakeData(); return 
 
         if (session.token === null) {
-            navigate(ROUTES.LOGIN, {replace: true})
-            return resetAll()
+            navigate(ROUTES.LOGIN, { replace: true })
+            resetAll()
+            return 
         }
 
-        if (location.pathname === ROUTES.LOGIN) navigate(ROUTES.MAIN, {replace: true})
+        if (location.pathname === ROUTES.LOGIN) navigate(ROUTES.MAIN, { replace: true })
 
         refreshPermissions()
         updateUserAndAgentData()
 
-    }, [session.token])
+    }, [session.token, location.pathname])
 
 
     const refreshPermissions = async () => {
         try {
             const response = await getPermissions(authedAxios())()
-            
-            if (response.success === false) throw new Error(response.message + ', ' + response.data)
 
-            if (typeof response.data !== 'string') {
-                control.setPermissionsData(response.data)
-            }
+            console.log('Refresh Permissions', response)
+
+            if (!response.success) throw new Error(response.message + ', ' + response.data)
+
+            control.setPermissionsData(response.data)
 
             return true
 
         } catch (err) {
-            
+
             if (err instanceof Error)
-            toast.error(`Error cargando los permisos del usuario ${session.user?.username}: ${err.message ?? err}`)
+                toast.error(`Error cargando los permisos del usuario ${session.user?.username}: ${err.message ?? err}`)
 
             resetAll()
 
@@ -123,13 +74,18 @@ export const useAuthHook = () => {
         }
     }
 
-    
-    const canAccess = ({path, make}: {path: string, make: keyof UserPermissions['can'] }) => {
+
+    const canAccess = ({ path, make }: { path: string, make: keyof UserPermissions['can'] }) => {
+
+        if (control.permissions === null) {
+            resetAll()
+            return false
+        }
 
         const permission = control.permissions
-            .filter(access => ( access.slug === path && access.can[make] ))
-        
-        if(permission.length === 0) {
+            .filter(access => (access.slug === path && access.can[make]))
+
+        if (permission.length === 0) {
             return false
         }
 
@@ -145,15 +101,15 @@ export const useAuthHook = () => {
             if (response.data === undefined
                 || typeof response.data === 'string') throw new Error("User data was not received")
 
-            
+
             session.setUserData(response.data)
 
             return true
 
-        } catch(err) {
-           
+        } catch (err) {
+
             if (err instanceof Error)
-            toast.error(`Error de sesion en ${location}: ${err.message ?? err}`)
+                toast.error(`Error de sesion en ${location}: ${err.message ?? err}`)
 
             resetAll()
 
@@ -162,9 +118,9 @@ export const useAuthHook = () => {
     }
 
     const login = async (credentials: Credentials) => {
-        const result = await Login(authRequest({}))(credentials)
+        const result = await Login(authRequest())(credentials)
 
-        if (result.success === false) {
+        if (!result.success) {
             toast.error(result.message, {
                 description: result.data,
                 duration: 5000
@@ -172,12 +128,9 @@ export const useAuthHook = () => {
             return false
         }
 
-        if (result.data) {
-            session.setToken(result.data)
-            toast.success(result.message)
-            navigate("/", {replace: true})
-        }
-    }    
+        session.setToken(result.data)
+        toast.success(result.message)
+    }
 
     return {
         login,

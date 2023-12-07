@@ -15,7 +15,6 @@ export const getAuthUser = (axios: ApiRequest) => async () => {
 
     } catch (error: unknown) {
         return {
-            success: false,
             message: "Error intentando obtener los datos del usuario",
             data: String(error)
         }
@@ -33,7 +32,6 @@ export const getPermissions = (axios: ApiRequest) => async () => {
         }
     } catch (error) {
         return {
-            success: false,
             message: "Error intentando obtener los permisos del usuario",
             data: String(error)
         }

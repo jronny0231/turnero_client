@@ -13,10 +13,10 @@ export const Login = (axios: ApiRequest) => async (credentials: Credentials) => 
                 data: resp.data?.token ?? undefined,
         }
     } catch (error: unknown) {
+        console.error("Login Services",error)
         const errorMsg = (error instanceof Error) ? error.message : String(error)
         
         return {
-            success: false,
             message: "Error intentando iniciar sesion",
             data: errorMsg
         }
@@ -37,7 +37,6 @@ export const Logout = (axios: ApiRequest) => async () => {
     } catch (error: unknown) {
 
         return {
-            success: false,
             message: "Error intentando cerrar sesión",
             data: String(error)
         }

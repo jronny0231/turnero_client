@@ -9,11 +9,8 @@
 }
 
 .grid-layout_normal {
-    display: grid;
-    height: 100vh;
-    width: 100%;
-    grid-template-rows: 50px 1fr 30px;
-    grid-template-columns: 150px 1fr 1fr;
+    grid-template-rows: 50px minmax(80vh, 1fr) 30px;
+    grid-template-columns: auto minmax(600px, 1fr);
     grid-template-areas:
         "header header header"
         "sidebar main main"

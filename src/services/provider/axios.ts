@@ -20,21 +20,22 @@ const instance: AxiosInstance = axios.create({
 		'Content-Type': 'application/json',
 		'Accept': 'application/x-www-form-urlencoded',
 		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Methods': '*',
 		'Access-Control-Allow-Headers': '*',
 		'Access-Control-Allow-Credentials': 'true'
 	},
-	timeout: 3000,
+	withCredentials: true
 });
 
 
-const settedInstance = (instance: AxiosInstance) => ({req, res}: Interceptor) => {
+const settedInstance = (instance: AxiosInstance) => (interceptor?: Interceptor) => {
 	instance.interceptors.request.use(
-		config => req !== undefined ? req(config) : config,
+		config => interceptor?.req ? interceptor?.req(config) : config,
 		requestHandlerError
 	)
 
 	instance.interceptors.response.use(
-		response => res !== undefined ? res(response) : response,
+		response => interceptor?.res ? interceptor?.res(response) : response,
 		responseHandlerError
 	)
 
@@ -44,9 +45,9 @@ const settedInstance = (instance: AxiosInstance) => ({req, res}: Interceptor) =>
 
 const responseBody = <T>(response: CustomAxiosResponse) => response.data as T;
 
-const MethodRequest = (instance: AxiosInstance) => ({req, res}: Interceptor): ApiRequest => {
+const MethodRequest = (instance: AxiosInstance) => (interceptor?: Interceptor): ApiRequest => {
 
-	const performedAxios = settedInstance(instance)({req, res})
+	const performedAxios = settedInstance(instance)(interceptor)
 
 	return {
 		get: <T>(url: string) => performedAxios.get(url)

@@ -1,9 +1,11 @@
 import { AxiosError, AxiosResponse } from 'axios'
 
+export interface SessionPermissionsData extends Pick<UserPermissions, 'id' | 'slug' | 'can' | 'nombre' | 'parent_id'> {}
+
 export type mainStoreType = {
     user: UserData | null
     agent: object | null
-    permissions: UserPermissions[]
+    permissions: SessionPermissionsData[] | null
 }
 
 export interface CustomAxiosError extends AxiosError<unknown, T> {
@@ -64,8 +66,6 @@ export type UserPermissions = {
         delete?: boolean
     }
 }
-
-export interface SessionPermissionsData extends Pick<UserPermissions, 'id' | 'slug' | 'can' | 'nombre' | 'parent_id'> {}
 
 export type IconProps = {
     strokeWidth?: number | undefined;

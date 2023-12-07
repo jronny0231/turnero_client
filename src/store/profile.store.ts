@@ -49,9 +49,9 @@ export const useAccountStore = create<accountStore>()(persist( (set) => {
 
 export const usePermissionsStore = create<permissionsStore>()(persist( (set) => {
     return {
-        permissions: [],
+        permissions: null,
 
         setPermissionsData: (permissions: SessionPermissionsData[]) => set({permissions: permissions}),
-        reset: () => set({ permissions: [] })
+        reset: () => set({ permissions: null })
     }
 }, { name: 'permissions'}))

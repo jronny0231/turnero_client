@@ -40,7 +40,7 @@ export const SidebarElement = ({ props }: { props: ElementProps }) => {
     return (
 
         <li>
-            <div className={`border-l-2 border-transparent ${activeStyle} h-12 transition-colors flex flex-row items-center justify-start`}>
+            <div className={`border-l-2 border-transparent ${activeStyle} py-2 transition-colors flex flex-row items-center justify-start`}>
                 <Link to={props.href} className="px-2 w-full h-full flex flex-row justify-start items-center gap-x-3">
                     <span> {props.icon} </span>
                     <span className="text-md ">{props.name}</span>
