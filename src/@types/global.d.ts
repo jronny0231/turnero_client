@@ -1,10 +1,13 @@
 import { AxiosError, AxiosResponse } from 'axios'
+import { userSchemaType } from '../helpers/schemas/user.schema'
+import { agentSchemaType } from '../helpers/schemas/agent.schema'
 
-export interface SessionPermissionsData extends Pick<UserPermissions, 'id' | 'slug' | 'can' | 'nombre' | 'parent_id'> {}
+export interface SessionPermissionsData
+    extends Pick<UserPermissions, 'id' | 'slug' | 'can' | 'nombre' | 'parent_id'> {}
 
 export type mainStoreType = {
     user: UserData | null
-    agent: object | null
+    agent: agentSchemaType | null
     permissions: SessionPermissionsData[] | null
 }
 
@@ -32,12 +35,9 @@ export type Response <type> = {
     data: type
 }
 
-export type UserData = {
+export interface UserData extends Omit<userSchemaType, 'password' | 'rol_id' | 'agente_id'> {
     id: number,
     type?: 'USER' | 'SUPER'
-    nombres: string,
-    correo: string,
-    username: string,
     activo: boolean,
     createdAt: Date,
     rol: {

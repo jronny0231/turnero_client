@@ -1,17 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import { useEffect, useState } from "react";
 import { useAccountStore, usePermissionsStore, useSessionStore } from "../store/profile.store";
 import { Login } from "../services/login.service";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Credentials, UserPermissions } from "../@types/global";
 import { getAuthUser, getPermissions } from "../services/auth.service";
-import { authRequest } from "../services/provider/axios";
+import { ApiRequest, authRequest } from "../services/provider/axios";
 import { authedRequestInterceptor } from "../services/provider/middleware/request.middleware";
 import { ROUTES } from "../lib/constants/app.constants";
 
 
 export const useAuthHook = () => {
+
+    const [authedAxios, setAuthedAxios] = useState<ApiRequest>( authRequest() )
 
     const session = useSessionStore(store => store)
     const account = useAccountStore(store => store)
@@ -28,14 +30,8 @@ export const useAuthHook = () => {
         control.reset()
     }
 
-    const authedAxios = () => {
-        return authRequest({
-            req: authedRequestInterceptor(session.token)
-        })
-    }
-
     // Load on instance auth hook and check session data, location path and redirect according to logic.
-    React.useEffect(() => {
+    useEffect(() => {
 
         if (session.token === null) {
             navigate(ROUTES.LOGIN, { replace: true })
@@ -43,17 +39,23 @@ export const useAuthHook = () => {
             return 
         }
 
+        setAuthedAxios(
+            authRequest({
+                req: authedRequestInterceptor(session.token)
+            })
+        )
+
         if (location.pathname === ROUTES.LOGIN) navigate(ROUTES.MAIN, { replace: true })
 
         refreshPermissions()
         updateUserAndAgentData()
 
-    }, [session.token, location.pathname])
+    }, [session.token, location.pathname, authRequest])
 
 
     const refreshPermissions = async () => {
         try {
-            const response = await getPermissions(authedAxios())()
+            const response = await getPermissions(authedAxios)()
 
             console.log('Refresh Permissions', response)
 
@@ -95,7 +97,7 @@ export const useAuthHook = () => {
 
     const updateUserAndAgentData = async (): Promise<boolean> => {
         try {
-            const response = await getAuthUser(authedAxios())()
+            const response = await getAuthUser(authedAxios)()
 
             if (response.success === false) throw new Error(response.message + ', ' + response.data)
             if (response.data === undefined
@@ -136,6 +138,7 @@ export const useAuthHook = () => {
         login,
         authed: session.user,
         access: control.permissions,
+        agent: account.agent,
         canAccess
     }
 }

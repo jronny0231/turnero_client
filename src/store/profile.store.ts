@@ -1,9 +1,10 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { type UserData, type SessionPermissionsData, type mainStoreType } from "../@types/global"
+import { agentSchemaType } from "../helpers/schemas/agent.schema"
 
 interface accountStore extends Pick<mainStoreType, 'agent'> { 
-    setAgentData: (agent: object) => void
+    setAgentData: (agent: agentSchemaType) => void
     reset: () => void
 }
 
@@ -40,7 +41,7 @@ export const useAccountStore = create<accountStore>()(persist( (set) => {
     return {
         agent: null,
         
-        setAgentData: (agent: object) => set({agent: agent}),
+        setAgentData: (agent: agentSchemaType) => set({agent: agent}),
         reset: () => set({ agent: null })
     }
 }, {

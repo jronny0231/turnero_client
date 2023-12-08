@@ -147,8 +147,8 @@ export const Layout = () => {
                 <h1>Layout Pague for Agent User Type</h1>
                 <span>{authed.nombres}</span>
             </header>
-            <aside className="bg-sky-100 text-prim-700 px-2 grid-sidebar select-none flex flex-col justify-between">
-                <section className="overflow-y-auto">
+            <aside className="bg-sky-100 text-prim-700 grid-sidebar select-none px-2 flex flex-col justify-between min-w-[200px]">
+                <section className="w-full overflow-y-auto overflow-x-hidden">
                     <Sidebar elements={sidebar} />
                 </section>
                 <section className="w-full py-3 border-prim-400 border-t-[1px] box-border">

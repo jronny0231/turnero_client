@@ -42,7 +42,7 @@ export const userCredential = userSchema.pick({
     password: true
 })
 
-
+export type userSchemaType = z.infer<typeof userSchema>
 export type createUserType = z.infer<typeof createUser>
 export type updateUserType = z.infer<typeof updateUser>
 export type userCredentialType = z.infer<typeof userCredential>
