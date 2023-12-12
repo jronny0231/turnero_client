@@ -1,19 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useAccountStore, usePermissionsStore, useSessionStore } from "../store/profile.store";
-import { Login } from "../services/login.service";
+import { Login, Logout } from "../services/login.service";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Credentials, UserPermissions } from "../@types/global";
 import { getAuthUser, getPermissions } from "../services/auth.service";
-import { ApiRequest, authRequest } from "../services/provider/axios";
+import { ApiRequest, axiosInstance } from "../services/provider/axios";
 import { authedRequestInterceptor } from "../services/provider/middleware/request.middleware";
 import { ROUTES } from "../lib/constants/app.constants";
 
 
 export const useAuthHook = () => {
 
-    const [authedAxios, setAuthedAxios] = useState<ApiRequest>( authRequest() )
+    const [authedAxios, setAuthedAxios] = useState<ApiRequest>(axiosInstance())
 
     const session = useSessionStore(store => store)
     const account = useAccountStore(store => store)
@@ -30,52 +29,26 @@ export const useAuthHook = () => {
         control.reset()
     }
 
-    // Load on instance auth hook and check session data, location path and redirect according to logic.
-    useEffect(() => {
-
-        if (session.token === null) {
-            navigate(ROUTES.LOGIN, { replace: true })
-            resetAll()
-            return 
-        }
-
-        setAuthedAxios(
-            authRequest({
-                req: authedRequestInterceptor(session.token)
-            })
-        )
-
-        if (location.pathname === ROUTES.LOGIN) navigate(ROUTES.MAIN, { replace: true })
-
-        refreshPermissions()
-        updateUserAndAgentData()
-
-    }, [session.token, location.pathname, authRequest])
-
 
     const refreshPermissions = async () => {
-        try {
-            const response = await getPermissions(authedAxios)()
 
-            console.log('Refresh Permissions', response)
+        const response = await getPermissions(authedAxios)()
+        if (!response.success) throw new Error(response.message + ', ' + response.data)
 
-            if (!response.success) throw new Error(response.message + ', ' + response.data)
+        control.setPermissionsData(response.data)
 
-            control.setPermissionsData(response.data)
-
-            return true
-
-        } catch (err) {
-
-            if (err instanceof Error)
-                toast.error(`Error cargando los permisos del usuario ${session.user?.username}: ${err.message ?? err}`)
-
-            resetAll()
-
-            return false
-        }
+        return true
     }
 
+    const updateUserData = async (): Promise<boolean> => {
+        
+        const response = await getAuthUser(authedAxios)()
+        if (!response.success) throw new Error(response.message + ', ' + response.data)
+
+        session.setUserData(response.data)
+
+        return true
+    }
 
     const canAccess = ({ path, make }: { path: string, make: keyof UserPermissions['can'] }) => {
 
@@ -95,32 +68,9 @@ export const useAuthHook = () => {
     }
 
 
-    const updateUserAndAgentData = async (): Promise<boolean> => {
-        try {
-            const response = await getAuthUser(authedAxios)()
-
-            if (response.success === false) throw new Error(response.message + ', ' + response.data)
-            if (response.data === undefined
-                || typeof response.data === 'string') throw new Error("User data was not received")
-
-
-            session.setUserData(response.data)
-
-            return true
-
-        } catch (err) {
-
-            if (err instanceof Error)
-                toast.error(`Error de sesion en ${location}: ${err.message ?? err}`)
-
-            resetAll()
-
-            return false
-        }
-    }
 
     const login = async (credentials: Credentials) => {
-        const result = await Login(authRequest())(credentials)
+        const result = await Login(axiosInstance())(credentials)
 
         if (!result.success) {
             toast.error(result.message, {
@@ -134,8 +84,58 @@ export const useAuthHook = () => {
         toast.success(result.message)
     }
 
+    const logout = async () => {
+        const result = await Logout(authedAxios)()
+
+        if (!result.success) {
+            toast.error(result.message, {
+                description: result.data,
+                duration: 5000
+            })
+            return false
+        }
+
+        resetAll()
+        toast.success(result.message)
+    }
+
+
+
+    // Load on instance auth hook and check session data, location path and redirect according to logic.
+    useMemo(() => {
+        console.log('Mounted TOKEN', session.token)
+        if (session.token === null) {
+            if (location.pathname !== ROUTES.LOGIN) navigate(ROUTES.LOGIN, { replace: true })
+            resetAll()
+            return
+        }
+
+        if (location.pathname === ROUTES.LOGIN) navigate(ROUTES.MAIN, { replace: true })
+
+        setAuthedAxios(
+            axiosInstance({
+                req: authedRequestInterceptor(session.token)
+            })
+        )
+
+        refreshPermissions().catch(err => {
+            void console.error('Permission Set Error', err)
+            resetAll()
+        }).then(() => {
+            updateUserData().catch(err => {
+                void console.error('User Data Set Error', err)
+                resetAll()
+            })
+        })
+
+
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [session.token, axiosInstance])
+
     return {
         login,
+        logout,
         authed: session.user,
         access: control.permissions,
         agent: account.agent,
