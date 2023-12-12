@@ -2,8 +2,7 @@ import { QueueIcon } from "../../lib/icons/app.icons";
 import { HomeIcon, SettingsIcon, UsersIcon } from "../../lib/icons/main.icons";
 import { Sidebar } from "./sidebar/sidebar";
 import { ROUTES } from "../../lib/constants/app.constants";
-import { useAuthHook } from "../../hooks/auth.hook"
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { ElementProps } from "./sidebar/sidebar.element";
 import { UserProfileTag } from "./profile/sidebar.tag";
 
@@ -12,8 +11,11 @@ const sidebar: ElementProps[] = [
         name: 'Inicio',
         icon: <HomeIcon />,
         href: ROUTES.MAIN
-    },
-    {
+    },{
+        name: 'Registro',
+        icon: <QueueIcon />,
+        href: ROUTES.REGISTRY
+    },{
         name: 'Ajustes',
         icon: <SettingsIcon />,
         href: ROUTES.ADMIN,
@@ -22,138 +24,39 @@ const sidebar: ElementProps[] = [
                 name: 'Usuarios',
                 icon: <UsersIcon />,
                 href: ROUTES.USERS
-            }, {
+            },{
                 name: 'Roles',
                 icon: <UsersIcon />,
                 href: ROUTES.ROLS
-            }, {
+            },{
                 name: 'Sistema',
                 icon: <UsersIcon />,
                 href: ROUTES.SYS
             }
         ]
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
-    },
-    {
-        name: 'Registro',
-        icon: <QueueIcon />,
-        href: ROUTES.REGISTRY
     }
 ]
 
 export const Layout = () => {
 
-    const { authed } = useAuthHook()
-
-    if (authed === null) return (<Navigate to={ROUTES.LOGIN} />)
-
     return (
-        <section className="grid max-h-screen w-full grid-layout_normal content-center gap-4">
+        <section className="grid min-h-screen w-full grid-full_aside_layout content-center gap-2">
             <header className="bg-prim-500 text-prim-50 grid-header pr-4 flex flex-row flex-nowrap items-center justify-end gap-x-8 select-none">
                 <h1>Layout Pague for Agent User Type</h1>
-                <span>{authed.nombres}</span>
+                <span>Nombre de usuario</span>
             </header>
-            <aside className="bg-sky-100 text-prim-700 grid-sidebar select-none px-2 flex flex-col justify-between min-w-[200px]">
-                <section className="w-full overflow-y-auto overflow-x-hidden">
+            <aside className="bg-sky-100 text-prim-700 grid-sidebar select-none px-2 flex flex-col justify-between max-w-[200px]">
+                <header className="w-full py-3 border-prim-400 border-b-[1px] box-border">
+                    <Link to={'/'} >
+                        <img src="/brand.png" alt="Brand Logo" className="w-full" />
+                    </Link>
+                </header>
+                <section className="h-full w-full overflow-y-auto overflow-x-hidden">
                     <Sidebar elements={sidebar} />
                 </section>
-                <section className="w-full py-3 border-prim-400 border-t-[1px] box-border">
+                <footer className="w-full py-3 border-prim-400 border-t-[1px] box-border">
                     <UserProfileTag />
-                </section>
+                </footer>
             </aside>
             <main className="bg-prim-50 text-prim-700 grid-main overflow-y-auto overflow-x-hidden">
                 <Outlet />

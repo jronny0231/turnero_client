@@ -32,7 +32,7 @@ export const SimpleTable = ({columns, data, actions, ...rest}: TableProps) => {
                 <tbody>
                     {data.map(row => {
                         return (
-                            <tr key={row.uuid} className="h-12 border-b-[1px] border-sec-100 bg-sec-50 even:contrast-125">
+                            <tr data-uuid={row.uuid} key={row.uuid} className="h-12 border-b-[1px] border-sec-100 bg-sec-50 even:contrast-125">
                                 {
                                     columns.map(col => {
                                         const cellId = `${row.uuid}_${col.key}`
@@ -47,7 +47,7 @@ export const SimpleTable = ({columns, data, actions, ...rest}: TableProps) => {
                                 {
                                     <td key={`${row.uuid}_actions`} className="h-14 flex flex-row flex-wrap justify-center content-center text-center">
                                         {actions.buttons.map(button => (
-                                            <IconButton key={`${row.uuid}_${button.name}`} {...button} />
+                                            <IconButton data-index={row.uuid} key={`${row.uuid}_${button.name}`} {...button} />
                                         ))}
                                     </td>
                                 }

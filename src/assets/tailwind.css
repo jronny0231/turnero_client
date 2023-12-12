@@ -8,11 +8,11 @@
     scroll-behavior: smooth;
 }
 
-.grid-layout_normal {
+.grid-full_aside_layout {
     grid-template-rows: 50px minmax(80vh, 1fr) 30px;
     grid-template-columns: auto minmax(600px, 1fr);
     grid-template-areas:
-        "header header header"
+        "sidebar header header"
         "sidebar main main"
         "footer footer footer"
     ;

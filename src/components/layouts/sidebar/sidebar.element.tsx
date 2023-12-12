@@ -58,8 +58,8 @@ export const SidebarElement = ({ props }: { props: ElementProps }) => {
                     </button>
                 )}
             </div>
-            {hasChild && isExpanded && (
-                <ul className={`flex flex-col gap-3 border-l-[1px] border-l-prim-200`}>
+            {hasChild && (
+                <ul className={`${isExpanded ? 'max-h-screen' : 'max-h-0'} overflow-hidden transition-[max-height] duration-500 transform-gpu flex flex-col bg-prim-200`}>
                     {props.children && props.children.map(el => (
                         <SidebarElement key={crypto.randomUUID()} props={el} />
                     ))}

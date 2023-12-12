@@ -1,12 +1,11 @@
-import { SearchIcon } from "../lib/icons/helper.icons"
+import { FemaleIcon, MaleIcon, SearchIcon } from "../lib/icons/helper.icons"
 import { UsersIcon } from "../lib/icons/main.icons"
-import { DataTable } from "../components/datatable/data.table"
+import { DataTable, type Props } from "../components/datatable/data.table"
 import { MainHeader } from "../components/header/main.header"
 import { useSEO } from "../hooks/useSEO"
-import data from "../../data/MOCK_DATA.json"
-import { TableProps } from "../components/datatable/lib/simple.table"
+import { toast } from "sonner"
 
-const columns: TableProps['columns'] = [
+const columns: Props['columns'] = [
     {
         key: 'id',
         name: 'ID',
@@ -23,41 +22,42 @@ const columns: TableProps['columns'] = [
         key: 'gender',
         name: 'GENERO',
     }, {
-        key: 'country',
-        name: 'CIUDAD',
+        key: 'job',
+        name: 'PROFESION',
     }
 ]
-
-const buttons: TableProps['actions'] = {
-    name: 'Acciones',
-    buttons: [
-        {
-            cback(e) {
-                console.log(e.currentTarget.ariaLabel)
-            },
-            name: 'Editar',
-            role: 'success',
-            bussy: false
-        },
-        {
-            cback(e) {
-                console.log(e.currentTarget.ariaLabel)
-            },
-            name: 'Eliminar',
-            role: 'danger',
-            bussy: false
-        }
-    ]
-}
 
 export const UsersList = (): JSX.Element => {
 
     useSEO({ title: 'Lista de Usuarios' })
 
-    const dataPerformed = data.map(row => ({
-        uuid: crypto.randomUUID(),
-        ...row
-    }))
+    const option: Props['options']  = {
+        customFields: [
+            {
+                key: 'gender',
+                onClick: (data) => {
+                    toast.success('Usuario', {
+                        description: JSON.stringify(data)
+                    })
+                },
+                statusStyle: [
+                    {
+                        style: 'bg-pink-300 text-pink-900',
+                        value: 'Female',
+                        icon: <FemaleIcon />
+                    },{
+                        style: 'bg-blue-300 text-blue-900',
+                        value: 'Male',
+                        icon: <MaleIcon />
+                    },{
+                        style: 'bg-yellow-300 text-yellow-900',
+                        value: 'Genderqueer'
+                    }
+                    
+                ]
+            }
+        ]
+    }
 
     return (
         <section className="w-full py-4 px-3 flex flex-col gap-y-7 justify-items-center items-start">
@@ -69,7 +69,7 @@ export const UsersList = (): JSX.Element => {
                         Adicionar
                     </button>
                 </search>
-                <DataTable columns={columns} data={dataPerformed} actions={buttons} />
+                <DataTable getDataApi="../../data/MOCK_DATA.json" columns={columns} options={option} />
             </section>
         </section>
     )

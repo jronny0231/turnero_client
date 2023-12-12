@@ -55,3 +55,19 @@ export const SpinnerIcon = ({size = 24, strokeWidth = 1}: IconProps) => {
         </svg>
     )
 }
+
+export const FemaleIcon = ({size = 24, strokeWidth = 1}: IconProps) => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 14 14">
+            <path strokeWidth={strokeWidth} fill="currentColor" d="M7 1.5A3.25 3.25 0 1 0 7 8a3.25 3.25 0 0 0 0-6.5Zm4.75 3.25a4.751 4.751 0 0 1-4 4.691v1.309h.75a.75.75 0 0 1 0 1.5h-.75v1a.75.75 0 0 1-1.5 0v-1H5.5a.75.75 0 0 1 0-1.5h.75V9.441a4.751 4.751 0 1 1 5.5-4.691Z"/>
+        </svg>
+    )
+}
+
+export const MaleIcon = ({size = 24, strokeWidth = 1}: IconProps) => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 14 14">
+            <path strokeWidth={strokeWidth} fill="currentColor" d="M8 .75A.75.75 0 0 1 8.75 0h4.5a.748.748 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V2.56L9.026 6.036a5 5 0 1 1-1.06-1.06l3.473-3.475H8.75A.75.75 0 0 1 8 .75Zm-.594 5.708a3.5 3.5 0 1 0 .135.135a.756.756 0 0 1-.135-.135Z"/>
+        </svg>
+    )
+}
