@@ -1,13 +1,25 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAccountStore, usePermissionsStore, useSessionStore } from "../store/profile.store";
 import { Login, Logout } from "../services/login.service";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Credentials, UserPermissions } from "../@types/global";
-import { getAuthUser, getPermissions } from "../services/auth.service";
+import { getAuthUser, getPermissions, refreshToken } from "../services/auth.service";
 import { ApiRequest, axiosInstance } from "../services/provider/axios";
 import { authedRequestInterceptor } from "../services/provider/middleware/request.middleware";
 import { ROUTES } from "../lib/constants/app.constants";
+
+
+/**
+ * ****** TO-DO
+ * Usar este objeto para setear los estados en el hock de profile.store:
+ * - setToken (login, logout, refresh)
+ * - reset All function
+ * 
+ * Crear un ContextProvider siguiendo buenas practicas para gestionar los datos de session
+ * tambien para inyectar mediante zustand los datos de usuario y la instancia de axios seteada.
+ * Si hay un error se limpiara mediante auth.hook
+ */
 
 
 export const useAuthHook = () => {
@@ -29,6 +41,35 @@ export const useAuthHook = () => {
         control.reset()
     }
 
+    // Load on instance auth hook and check session data, location path and redirect according to logic.
+    useEffect(() => {
+
+        if (session.token === null) {
+            if (location.pathname !== ROUTES.LOGIN) navigate(ROUTES.LOGIN, { replace: true })
+            resetAll()
+            return
+        }
+
+        refreshToken(authedAxios)()
+            .then(response => {
+                if (response.success) {
+                    console.log('Token Refreshed', response.data)
+                    session.setToken(response.data)
+                }
+                else {
+                    toast.error(response.message, {
+                        description: response.data
+                    })
+                    resetAll()
+                }
+            })
+
+        if (location.pathname === ROUTES.LOGIN) navigate(ROUTES.MAIN, { replace: true })
+
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [session.token])
+
 
     const refreshPermissions = async () => {
 
@@ -41,7 +82,7 @@ export const useAuthHook = () => {
     }
 
     const updateUserData = async (): Promise<boolean> => {
-        
+
         const response = await getAuthUser(authedAxios)()
         if (!response.success) throw new Error(response.message + ', ' + response.data)
 
@@ -82,6 +123,8 @@ export const useAuthHook = () => {
 
         session.setToken(result.data)
         toast.success(result.message)
+
+        return true
     }
 
     const logout = async () => {
@@ -99,39 +142,26 @@ export const useAuthHook = () => {
         toast.success(result.message)
     }
 
-
-
-    // Load on instance auth hook and check session data, location path and redirect according to logic.
     useMemo(() => {
-        console.log('Mounted TOKEN', session.token)
-        if (session.token === null) {
-            if (location.pathname !== ROUTES.LOGIN) navigate(ROUTES.LOGIN, { replace: true })
-            resetAll()
-            return
-        }
-
-        if (location.pathname === ROUTES.LOGIN) navigate(ROUTES.MAIN, { replace: true })
-
         setAuthedAxios(
             axiosInstance({
                 req: authedRequestInterceptor(session.token)
             })
         )
 
-        refreshPermissions().catch(err => {
-            void console.error('Permission Set Error', err)
-            resetAll()
-        }).then(() => {
-            updateUserData().catch(err => {
-                void console.error('User Data Set Error', err)
+        if (session.token) {
+            refreshPermissions().catch(err => {
+                void console.error('Permission Set Error', err)
                 resetAll()
+            }).then(() => {
+                updateUserData().catch(err => {
+                    void console.error('User Data Set Error', err)
+                    resetAll()
+                })
             })
-        })
-
-
-
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [session.token, axiosInstance])
+    }, [session.token])
 
     return {
         login,
