@@ -1,4 +1,4 @@
-import { Response, UserData, UserPermissions } from "../@types/global";
+import { UserData, UserPermissions } from "../@types/global";
 import { PATH_URI } from "../lib/constants/api.constants";
 import { type ApiRequest } from "./provider/axios";
 
@@ -38,13 +38,20 @@ export const getPermissions = (axios: ApiRequest) => async () => {
     }
 }
 
-export const refreshToken = (axios: ApiRequest) => async (): Promise<string|null> => {
+export const refreshToken = (axios: ApiRequest) => async () => {
     
     try {
-        const resp = await axios.get(PATH_URI.NEW_TOKEN) as Response<{token: string}>;
-        return resp.data?.token ?? null
+        const resp = await axios.get<string>(PATH_URI.NEW_TOKEN);
+        return {
+            success: true,
+            message: "Token actualizado",
+            data: resp.data,
+        }
 
-    } catch (error: unknown) {
-        return null;
+    } catch (error) {
+        return {
+            message: "Error intentando actualizar el token",
+            data: String(error)
+        }
     }
 }
