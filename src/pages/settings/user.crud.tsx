@@ -1,8 +1,8 @@
-import { FemaleIcon, MaleIcon, SearchIcon } from "../lib/icons/helper.icons"
-import { UsersIcon } from "../lib/icons/main.icons"
-import { DataTable, type Props } from "../components/datatable/data.table"
-import { MainHeader } from "../components/header/main.header"
-import { useSEO } from "../hooks/useSEO"
+import { FemaleIcon, MaleIcon, SearchIcon } from "../../lib/icons/helper.icons"
+import { UsersIcon } from "../../lib/icons/main.icons"
+import { DataTable, type Props } from "../../components/datatable/data.table"
+import { MainHeader } from "../../components/header/main.header"
+import { useSEO } from "../../hooks/useSEO"
 import { toast } from "sonner"
 
 const columns: Props['columns'] = [
@@ -42,15 +42,15 @@ export const UsersList = (): JSX.Element => {
                 },
                 statusStyle: [
                     {
-                        style: 'bg-pink-300 text-pink-900',
+                        style: { color: 'pink' },
                         value: 'Female',
                         icon: <FemaleIcon />
                     },{
-                        style: 'bg-blue-300 text-blue-900',
+                        style: { color: 'blue' },
                         value: 'Male',
                         icon: <MaleIcon />
                     },{
-                        style: 'bg-yellow-300 text-yellow-900',
+                        style: { color: 'green' },
                         value: 'Genderqueer'
                     }
                     
