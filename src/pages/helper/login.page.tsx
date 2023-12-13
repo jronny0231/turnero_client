@@ -2,7 +2,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputPassword, InputText } from "../../components/shared/inputs/input";
 import { userCredential, userCredentialType } from "../../helpers/schemas/user.schema";
-import { toast } from 'sonner'
 import { useAuthHook } from '../../hooks/auth.hook'
 import { useState } from "react";
 import { Button } from "../../components/shared/buttons/button";
@@ -10,7 +9,7 @@ import { useSEO } from "../../hooks/useSEO";
 
 export const LoginPage = (): React.ReactElement => {
 
-    useSEO({title: 'Inicie sesion'})
+    useSEO({ title: 'Inicie sesion' })
 
     const { register, handleSubmit, formState: { errors }, } = useForm<userCredentialType>({
         resolver: zodResolver(userCredential),
@@ -20,16 +19,12 @@ export const LoginPage = (): React.ReactElement => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const onSubmit: SubmitHandler<userCredentialType> = async (data) => {
-        
+
         setIsLoading(true)
-        try {
-            await login(data)
-        } catch (error) {
-            console.error(error)
-            toast.error('Error trying login')
-        } finally {
-            setIsLoading(false)
-        }
+
+        await login(data)
+
+        setIsLoading(false)
     }
 
     return (
