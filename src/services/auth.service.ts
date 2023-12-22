@@ -1,4 +1,4 @@
-import { UserData, UserPermissions } from "../@types/global";
+import { UserData, AgentData, UserPermissions } from "../@types/schema";
 import { PATH_URI } from "../lib/constants/api.constants";
 import { type ApiRequest } from "./provider/axios";
 
@@ -10,7 +10,7 @@ export const getAuthUser = (axios: ApiRequest) => async () => {
         return {
             success: true,
             message: "Datos obtenidos satisfactoriamente",
-            data: resp.data ?? undefined,
+            data: resp.data,
         }
 
     } catch (error: unknown) {
@@ -33,6 +33,24 @@ export const getPermissions = (axios: ApiRequest) => async () => {
     } catch (error) {
         return {
             message: "Error intentando obtener los permisos del usuario",
+            data: String(error)
+        }
+    }
+}
+
+export const getAgentData = (axios: ApiRequest) => async () => {
+
+    try {
+        const resp = await axios.get<AgentData>(PATH_URI.LOGGED_USER_AGENT);
+        return {
+            success: true,
+            message: "Datos obtenidos satisfactoriamente",
+            data: resp.data,
+        }
+
+    } catch (error: unknown) {
+        return {
+            message: "Error intentando obtener los datos del usuario",
             data: String(error)
         }
     }
