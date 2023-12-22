@@ -9,3 +9,9 @@ export const ROUTES = {
     ROLS: '/admin/rols',
     SYS: '/admin/system',
 }
+
+export const STORAGE_KEYS = {
+    SESSION: 'session',
+    ACCOUNT: 'account',
+    PERMISSIONS: 'permissions'
+}
