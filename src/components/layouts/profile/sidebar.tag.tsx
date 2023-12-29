@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuthHook } from '../../../hooks/auth.hook';
 import { SettingsIcon, UsersIcon } from '../../../lib/icons/main.icons';
 import { MenuIcon } from '../../../lib/icons/helper.icons';
+import { useSessionStore } from '../../../store/profile.store';
 
 enum PositionStyles {
     'top-left' = 'bottom-10 right-0 origin-bottom-right',
@@ -29,24 +30,26 @@ export const UserProfileTag = (props: Props) => {
     const [isProfileActive, setIsProfileActive] = useState(false)
     const { logout } = useAuthHook()
 
+    const { user } = useSessionStore(state => state)
+
     const floatPosition = props.options?.float?.position ?? 'top-right'
     const menuStylePosition = PositionStyles[floatPosition]
 
 
     return (
-        <div className='h-20 flex items-center pl-2'>
-            <div className="w-full flex items-center gap-x-4">
-                <picture className="flex flex-wrap justify-center content-center w-10 h-10 rounded-full bg-prim-600 text-white">
-                    <UsersIcon />
+        <article className='h-20 flex items-center pl-2'>
+            <div className="w-full flex items-center gap-x-2">
+                <picture className="flex flex-wrap justify-center content-center p-2 rounded-full bg-prim-600 text-white">
+                    <UsersIcon size={18}/>
                 </picture>
                 <div>
                     <span className="block text-gray-700 text-sm font-semibold">
-                        {'Nombre agente'}
+                        {user?.nombres ?? user?.username}
                     </span>
                     <span
                         className="block mt-px text-gray-600 text-xs"
                     >
-                        {'Tipo de agente'}
+                        {user?.rol?.nombre ?? user?.correo}
                     </span>
                 </div>
                 <div className="relative flex-1 text-right">
@@ -69,6 +72,6 @@ export const UserProfileTag = (props: Props) => {
                         </div>
                 </div>
             </div>
-        </div>
+        </article>
     )
 }
