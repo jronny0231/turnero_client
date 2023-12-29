@@ -2,9 +2,11 @@ import { QueueIcon } from "../../lib/icons/app.icons";
 import { HomeIcon, SettingsIcon, UsersIcon } from "../../lib/icons/main.icons";
 import { Sidebar } from "./sidebar/sidebar";
 import { ROUTES } from "../../lib/constants/app.constants";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import { ElementProps } from "./sidebar/sidebar.element";
 import { UserProfileTag } from "./profile/sidebar.tag";
+import { useAccountStore } from "../../store/profile.store";
+import { useEffect, useState } from "react";
 
 const sidebar: ElementProps[] = [
     {
@@ -39,13 +41,26 @@ const sidebar: ElementProps[] = [
 
 export const Layout = () => {
 
+    const { agent } = useAccountStore(store => store)
+    const [title, setTitle] = useState<string>()
+    const location = useLocation()
+
+    useEffect(() => {
+        let title = location.pathname.slice(1)
+        title = title === "" ? "home" : title.replace(/[/]/gi," / ")
+
+        setTitle(title)
+    }, [location])
+
     return (
         <section className="grid min-h-screen w-full grid-full_aside_layout content-center gap-2">
-            <header className="bg-prim-500 text-prim-50 grid-header pr-4 flex flex-row flex-nowrap items-center justify-end gap-x-8 select-none">
-                <h1>Layout Pague for Agent User Type</h1>
-                <span>Nombre de usuario</span>
+            
+            <header className="grid-header bg-prim-500 text-prim-50 pr-4 flex flex-row flex-nowrap items-center justify-end gap-x-8 select-none">
+                <h1>{title}</h1>
+                <span>{agent?.nombre ?? ''}</span>
             </header>
-            <aside className="bg-sky-100 text-prim-700 grid-sidebar select-none px-2 flex flex-col justify-between max-w-[200px]">
+
+            <aside className="grid-sidebar bg-transparent text-prim-700 select-none px-2 flex flex-col justify-between max-w-[200px]">
                 <header className="w-full py-3 border-prim-400 border-b-[1px] box-border">
                     <Link to={'/'} >
                         <img src="/brand.png" alt="Brand Logo" className="w-full" />
@@ -58,26 +73,15 @@ export const Layout = () => {
                     <UserProfileTag />
                 </footer>
             </aside>
-            <main className="bg-prim-50 text-prim-700 grid-main overflow-y-auto overflow-x-hidden">
+
+            <main className="grid-main bg-prim-50 text-prim-700 overflow-y-auto overflow-x-hidden">
                 <Outlet />
             </main>
-            <footer className="bg-emphasys-600 text-emphasys-50 grid-footer content-center text-center">
+
+            <footer className="grid-footer bg-emphasys-600 text-emphasys-50 content-center text-center">
                 Footer
             </footer>
+
         </section>
     )
-
 }
-
-/*
-const List = {
-    [ROUTES.ADMIN]: {
-        name: '',
-        icon: 
-    }
-}
-
-const sidebarList = (data: []) => {
-
-}
-*/
