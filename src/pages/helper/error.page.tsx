@@ -33,7 +33,7 @@ type ErrorPage = {
     }
 }
 
-export const ErrorPage = ({ type, message, action }: ErrorPage): React.ReactElement => {
+const ErrorPage = ({ type, message, action }: ErrorPage): React.ReactElement => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -54,7 +54,7 @@ export const ErrorPage = ({ type, message, action }: ErrorPage): React.ReactElem
             <h1 className="uppercase font-sans text-4xl opacity-40 text-cyan-100 tracking-wider antialiased hover:subpixel-antialiased">
                 {title}
             </h1>
-            <div className="uppercase py-1 font-sans text-md font-semibold bg-gradient-to-r from-prim-600 to-blue-600 text-prim-50">
+            <div className="py-1 font-sans text-md font-semibold bg-gradient-to-r from-prim-600 to-blue-600 text-prim-50">
                 <span>
                     {errorMsg}
                 </span>
@@ -66,3 +66,5 @@ export const ErrorPage = ({ type, message, action }: ErrorPage): React.ReactElem
         </section>
     )
 }
+
+export { ErrorPage }

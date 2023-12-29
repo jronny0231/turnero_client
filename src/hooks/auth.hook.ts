@@ -7,6 +7,7 @@ import { Credentials } from "../@types/global";
 import { axiosInstance } from "../services/provider/axios";
 import { authedRequestInterceptor } from "../services/provider/middleware/request.middleware";
 import { ROUTES } from "../lib/constants/app.constants";
+import { refreshToken } from "../services/auth.service";
 
 
 /**
@@ -46,6 +47,21 @@ export const useAuthHook = () => {
             resetAll()
             return
         }
+
+        const axios = axiosInstance({ req: authedRequestInterceptor(session.token) })
+        
+        refreshToken(axios)().then(result => {
+            if (result.success) {
+                return session.setToken(result.data)
+            }
+
+            toast.error(result.message, {
+                description: result.data,
+                duration: 5000
+            })
+
+            return resetAll()
+        })
 
         if (location.pathname === ROUTES.LOGIN) navigate(ROUTES.MAIN, { replace: true })
 
