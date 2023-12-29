@@ -1,20 +1,7 @@
-import { ButtonType, IconButton } from "../../shared/buttons/icon.button"
+import { IconButton } from "../../../shared/buttons/icon.button"
+import { tableProps } from "../@types/components"
 
-type HTMLTableType = JSX.IntrinsicElements["table"]
-
-export interface TableProps extends HTMLTableType {
-    columns: {
-        key: string
-        name: string
-    }[]
-    data: {uuid: `${string}-${string}-${string}-${string}-${string}`}[]
-    actions: {
-        name: string
-        buttons: ButtonType[]
-    }
-}
-
-export const SimpleTable = ({columns, data, actions, ...rest}: TableProps) => {
+export const SimpleTable = ({columns, data, actions, ...rest}: tableProps) => {
 
     return (
         <div className="w-full min-h-max max-h-[450px] overflow-x-auto overflow-y-auto">
