@@ -1,6 +1,6 @@
 import "./assets/styles.css"
 import { Routes, Route } from 'react-router-dom'
-import { UsersList } from './pages/settings/user.crud';
+import { UsersList } from './pages/settings/users/user.crud';
 import { ErrorPage } from './pages/helper/error.page';
 import { LoginPage } from './pages/helper/login.page';
 import { Layout } from './components/layouts/layout';
