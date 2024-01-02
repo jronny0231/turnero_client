@@ -16,6 +16,15 @@ import { viewUserType } from "../../../helpers/schemas/user.schema"
  * - Terminar de implementar TansTak Query en la tabla con paginado en el footer del DataTable
  */
 
+/**
+ * id: number;
+    nombres: string;
+    correo: string;
+    username: string;
+    rol_id: number;
+    agente_id: number;
+ */
+
 export const UsersList = (): JSX.Element => {
 
     useSEO({ title: 'Lista de Usuarios' })
@@ -26,7 +35,11 @@ export const UsersList = (): JSX.Element => {
         url: "../../data/MOCK_DATA.json",
         
         columns: [
-            { key: 'id', name: 'ID' }
+            { key: 'id', name: 'ID' },
+            { key: 'nombres', name: 'NOMBRE'},
+            { key: 'correo', name: 'CORREO'},
+            { key: 'rol_id', name: 'ID ROL'},
+            { key: 'agente_id', name: 'ID AGENTE'}
         ],
         
         options: {
