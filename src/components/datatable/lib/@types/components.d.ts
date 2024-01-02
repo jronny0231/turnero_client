@@ -28,8 +28,9 @@ export interface customFieldProps extends statusStyle {
     }
 }
 
-export type tableRow = {
+export interface tableRow<T> extends T {
     uuid: `${string}-${string}-${string}-${string}-${string}`
+    
 }
 
 export type actionBtn = {

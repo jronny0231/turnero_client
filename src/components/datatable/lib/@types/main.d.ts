@@ -1,10 +1,18 @@
-import { TableProps } from "../components/main.table"
 import { customFieldType } from "./components"
 
-export export type Props = {
-    columns: TableProps['columns']
-    getDataApi: string
-    options?: {
-        customFields: customFieldType[]
-    }
+export type ColumnsType<T> = Array<{
+    key: keyof T,
+    name: string,
+}>
+
+export type OptionType = {
+    customFields: customFieldType[]
+
+} | undefined
+
+export type StateType = {
+    columns: ColumnsType
+    data: tableRow[]
+    isLoading: boolean
+    hasErrors: boolean
 }

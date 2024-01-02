@@ -1,58 +1,60 @@
-import { useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { tableRow } from "../@types/components"
-import { Props } from "../@types/main"
 import { PerformedRowData } from "../components/helpers/rows.performed"
+import { type StateType, type OptionType, type ColumnsType } from "../@types/main"
+//import { useReactTable } from "@tanstack/react-table"
 
-export const useDataTable = () => {
+type Props<T> = {
+    url: string
+    columns: ColumnsType<T>
+    options?: OptionType
+}
 
-    const [props, setProps] = useState<Props | null>(null)
-    const [data, setData] = useState<tableRow[]>([])
+export const useDataTable = <T>({ url, columns, options }: Props<T>): StateType => {
+
+    const [data, setData] = useState<tableRow<T>[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [hasErrors, setHasErrors] = useState<boolean>(false)
 
-    useMemo(() => {
+    useEffect(() => {
         setIsLoading(true)
         setHasErrors(false)
 
-        if (props) {
-            const loadData = async () => {
-                setIsLoading(true)
+        const loadData = async () => {
+            setIsLoading(true)
 
-                const raw = await fetch(props.getDataApi)
-                const data: object[] = await raw.json()
-                const performedData = []
+            const raw = await fetch(url)
+            const data: object[] = await raw.json()
+            const performedData = []
 
-                for (const row of data) {
-                    const performedRow = await PerformedRowData({
-                        row,
-                        customField: props.options?.customFields
-                    })
-                    performedData.push(performedRow)
-                }
-
-                return performedData
-
+            for (const row of data) {
+                const performedRow = await PerformedRowData({
+                    row,
+                    customField: options?.customFields
+                })
+                performedData.push(performedRow)
             }
 
-            loadData()
-                .then(setData)
-                .catch(err => {
-                    setHasErrors(true)
-                    console.error('Error fetching Data Table', err)
-                })
-                .finally(() => {
-                    setIsLoading(false)
-                })
+            return performedData
+
         }
 
+        loadData()
+            .then(setData)
+            .catch(err => {
+                setHasErrors(true)
+                console.error('Error fetching Data Table', err)
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
 
-
-    }, [props])
+    }, [options, url])
 
     return {
-        setProps,
-        isLoading,
+        columns,
         data,
+        isLoading,
         hasErrors
     }
 }

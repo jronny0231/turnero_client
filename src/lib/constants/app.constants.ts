@@ -6,8 +6,18 @@ export const ROUTES = {
     SERVICE: '/service',
     ADMIN: '/admin',
     USERS: '/admin/users',
-    ROLS: '/admin/rols',
+    ROLS: '/admin/roles',
     SYS: '/admin/system',
+}
+
+export const SLUG = {
+    DASHBOARD: 'dashboard',
+    REGISTRY: 'registry',
+    SERVICE: 'service',
+    ADMIN: 'admin',
+    USERS: 'users',
+    ROLS: 'roles',
+    SYS: 'system',
 }
 
 export const STORAGE_KEYS = {

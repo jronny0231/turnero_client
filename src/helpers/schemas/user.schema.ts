@@ -2,6 +2,7 @@ import { z } from 'zod'
 import * as msg from './utils/messages';
 
 export const userSchema = z.object({
+    id: z.coerce.number().gte(1),
     nombres: z.string({ description: msg.type('STRING') }).min(1, msg.min(1)).max(50, msg.max(50)),
     correo: z.string({ description: msg.type('STRING') }).email(msg.email).max(60, msg.max(60)),
     username: z.string({ description: msg.type('STRING') }).min(3, msg.min(3)).max(15, msg.max(15))
@@ -21,6 +22,10 @@ export const userSchema = z.object({
             "Debe contener al menos un numero"),
     rol_id: z.number({ description: msg.type('NUMBER') }).gte(1, msg.min(1)),
     agente_id: z.coerce.number({ description: msg.type('NUMBER') }).gte(1, msg.min(1))
+})
+
+export const viewUser = userSchema.omit({
+    password: true
 })
 
 export const createUser = userSchema.partial({
@@ -43,6 +48,7 @@ export const userCredential = userSchema.pick({
 })
 
 export type userSchemaType = z.infer<typeof userSchema>
+export type viewUserType = z.infer<typeof viewUser>
 export type createUserType = z.infer<typeof createUser>
 export type updateUserType = z.infer<typeof updateUser>
 export type userCredentialType = z.infer<typeof userCredential>

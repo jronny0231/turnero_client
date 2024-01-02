@@ -2,7 +2,7 @@ import { type customFieldType, type tableRow, type statusStyle } from "../../@ty
 import { CustomField } from "../custom.element"
 
 export const PerformedRowData = async ({ row, customField }: { row: object, customField?: customFieldType[] }):
-    Promise<tableRow> => {
+    Promise<tableRow<typeof row>> => {
 
     return new Promise((res) => {
         const uuid = crypto.randomUUID()
