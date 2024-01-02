@@ -10,8 +10,9 @@ type Props<T> = {
     options?: OptionType
 }
 
-export const useDataTable = <T>({ url, columns, options }: Props<T>): StateType => {
+export const useDataTable = <T>(args: Props<T>): StateType => {
 
+    const [props] = useState<Props<T>>(args)
     const [data, setData] = useState<tableRow<T>[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [hasErrors, setHasErrors] = useState<boolean>(false)
@@ -23,14 +24,14 @@ export const useDataTable = <T>({ url, columns, options }: Props<T>): StateType 
         const loadData = async () => {
             setIsLoading(true)
 
-            const raw = await fetch(url)
+            const raw = await fetch(props.url)
             const data: object[] = await raw.json()
             const performedData = []
 
             for (const row of data) {
                 const performedRow = await PerformedRowData({
                     row,
-                    customField: options?.customFields
+                    customField: props.options?.customFields
                 })
                 performedData.push(performedRow)
             }
@@ -49,10 +50,10 @@ export const useDataTable = <T>({ url, columns, options }: Props<T>): StateType 
                 setIsLoading(false)
             })
 
-    }, [options, url])
+    }, [props.options, props.url])
 
     return {
-        columns,
+        columns: props.columns,
         data,
         isLoading,
         hasErrors
