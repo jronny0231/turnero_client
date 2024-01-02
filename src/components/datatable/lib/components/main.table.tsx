@@ -5,7 +5,7 @@ export const SimpleTable = ({columns, data, actions, ...rest}: tableProps) => {
 
     return (
         <div className="w-full min-h-max max-h-[450px] overflow-x-auto overflow-y-auto">
-            <table className="relative border-collapse" {...rest}>
+            <table className="w-full relative border-collapse" {...rest}>
                 <thead>
                     <tr className="drop-shadow-lg sticky top-[0] z-10">
                         {columns.map(col => (
